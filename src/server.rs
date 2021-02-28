@@ -1,5 +1,5 @@
-use std::io::Read;
-use crate::http::Request;
+use std::io::{Read, Write};
+use crate::http::{Request, Response, StatusCode};
 use std::convert::TryFrom;
 use std::net::TcpListener;
 
@@ -28,6 +28,8 @@ impl Server {
                             match Request::try_from(&buffer[..]) {
                                 Ok(request) => {
                                     dbg!(request);
+                                    let response = Response::new(StatusCode::Ok, Some("<h1>It works!!!</h1>".to_string()));
+                                    write!(stream, "{}", response);
                                 },
                                 Err(e) => println!("Failer to parse a request: {}", e),
                             }
